@@ -1,82 +1,105 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { GiHamburgerMenu } from 'react-icons/gi'
-import { CgClose } from 'react-icons/cg'
+import { Menu, Transition } from '@headlessui/react'
+
+import { MenuIcon } from '../assets/MenuIcon'
 
 export default function Header() {
-  const [showMenu, setShowMenu] = useState(false)
-
   return (
-    <header className="w-full px-4 py-4 bg-black">
+    <header className="w-full px-4 py-4 bg-black relative">
       <div className="max-w-screen-lg mx-auto flex justify-between items-center">
         <Link to="/">
-          <a>
-            <h1 className="text-2xl font-bold hover:brightness-105 transition-all">
-              <span className="text-red-600">My</span>Flix
-            </h1>
-          </a>
+          <h1 className="text-2xl font-bold">
+            <span className="text-red-600">My</span>Flix
+          </h1>
         </Link>
 
-        <nav>
-          <button className="sm:hidden" onClick={() => setShowMenu(!showMenu)}>
-            {showMenu ? (
-              <CgClose
-                size={26}
-                fill="white"
-                className="box-content p-1 bg-red-600 rounded-sm hover:brightness-90"
-              />
-            ) : (
-              <GiHamburgerMenu
-                size={26}
-                fill="white"
-                className="box-content p-1 bg-red-600 rounded-sm hover:brightness-90"
-              />
-            )}
-          </button>
+        {/* Menu Screen */}
+        <nav className="hidden md:block">
+          <ul className="flex gap-4">
+            <li>
+              <Link
+                to="/"
+                className="hover:text-red-600 font-medium transition"
+              >
+                Home
+              </Link>
+            </li>
 
-          <ul className="hidden sm:flex items-center gap-4">
             <li>
-              <Link to="/">
-                <a className="hover:text-red-100 transition-all">Home</a>
+              <Link
+                to="/"
+                className="hover:text-red-600 font-medium transition"
+              >
+                Search
               </Link>
             </li>
+
             <li>
-              <Link to="/search">
-                <a className="hover:text-red-100 transition-all">Buscar</a>
+              <Link
+                to="/"
+                className="hover:text-red-600 font-medium transition"
+              >
+                Login
               </Link>
-            </li>
-            <li>
-              <button>Login</button>
             </li>
           </ul>
         </nav>
-      </div>
 
-      <nav
-        className={`${showMenu ? 'block' : 'hidden'} sm:hidden`}
-        onClick={() => setShowMenu(!showMenu)}
-      >
-        <ul className=" flex flex-col pt-4  showFromTop">
-          <li className="border-t-2 border-red-600 border-opacity-30 py-2">
-            <Link to="/">
-              <a className="hover:text-red-100 transition-all">Home</a>
-            </Link>
-          </li>
-          <li className="border-t-2 border-red-600 border-opacity-30 py-2">
-            <Link to="/search">
-              <a className="hover:text-red-100 transition-all">Buscar</a>
-            </Link>
-          </li>
-          <li className="pt-2 border-t-2 border-red-600 border-opacity-30">
-            <button>Login</button>
-          </li>
-        </ul>
-        <div
-          onClick={() => setShowMenu(false)}
-          className="fixed t-0 left-0 r-0 h-screen w-screen bg-black bg-opacity-30 showFromTransparency"
-        />
-      </nav>
+        {/* Menu Mobile */}
+        <Menu as="nav" className="block md:hidden">
+          {({ open }) => (
+            <>
+              <Menu.Button>
+                <MenuIcon className="text-white bg-red-600 p-1 w-8 h-8 rounded-sm hover:bg-red-700 transition" />
+              </Menu.Button>
+
+              <Transition
+                className="bg-black absolute top-[100%] left-0 right-0 px-4 z-50"
+                enter="transition duration-300"
+                enterFrom="opacity-0 translate-y-[-10%]"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition duration-300"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-[-10%]"
+              >
+                <Menu.Items as="ul">
+                  <Menu.Item as="li" className="border-t-red-600/30 border-t">
+                    <Link
+                      to="/"
+                      className="hover:text-red-600 font-medium transition py-2 block"
+                    >
+                      Home
+                    </Link>
+                  </Menu.Item>
+
+                  <Menu.Item as="li" className="border-t-red-600/30 border-t">
+                    <Link
+                      to="/"
+                      className="hover:text-red-600 font-medium transition py-2 block"
+                    >
+                      Search
+                    </Link>
+                  </Menu.Item>
+
+                  <Menu.Item as="li" className="border-t-red-600/30 border-t">
+                    <Link
+                      to="/"
+                      className="hover:text-red-600 font-medium transition py-2 block"
+                    >
+                      Login
+                    </Link>
+                  </Menu.Item>
+                </Menu.Items>
+
+                {open && (
+                  <div className="absolute top-[100%] left-0 right-0 h-screen bg-black/60 z-40" />
+                )}
+              </Transition>
+            </>
+          )}
+        </Menu>
+      </div>
     </header>
   )
 }

@@ -15,7 +15,7 @@ export function FilmCardHome({ movie }: FilmCardHomeProps) {
           alt={movie.title}
         />
 
-        <h2 className="absolute top-0 left-0 w-full h-full bg-black/50 font-bold flex justify-center items-center text-center p-4 -translate-x-full group-hover:translate-x-0 transition">
+        <h2 className="absolute top-0 left-0 w-full h-full bg-black/50 font-bold text-lg flex justify-center items-center text-center p-4 -translate-x-full group-hover:translate-x-0 transition">
           {movie.title}
         </h2>
       </Link>
