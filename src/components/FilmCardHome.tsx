@@ -8,14 +8,16 @@ interface FilmCardHomeProps {
 
 export function FilmCardHome({ movie }: FilmCardHomeProps) {
   return (
-    <li className="bg-black rounded-sm overflow-hidden shadow-md group">
-      <Link to="/" className="flex flex-col">
+    <li className="bg-black rounded-sm overflow-hidden shadow-md group hover:scale-105 transition">
+      <Link to="/" className="flex flex-col relative">
         <img
-          className="group-hover:hover:brightness-75 transition-all"
-          src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
           alt={movie.title}
         />
-        <h2 className="p-4 text-center text-xl font-bold">{movie.title}</h2>
+
+        <h2 className="absolute top-0 left-0 w-full h-full bg-black/50 font-bold flex justify-center items-center text-center p-4 -translate-x-full group-hover:translate-x-0 transition">
+          {movie.title}
+        </h2>
       </Link>
     </li>
   )
