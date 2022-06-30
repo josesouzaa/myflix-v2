@@ -1,9 +1,13 @@
+import Header from './components/Header'
 import { Router } from './Router'
 
 export function App() {
   return (
-    <main>
-      <Router />
-    </main>
+    <>
+      <Header />
+      <main className="pt-8">
+        <Router />
+      </main>
+    </>
   )
 }
