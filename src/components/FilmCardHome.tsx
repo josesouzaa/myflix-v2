@@ -13,7 +13,11 @@ function FilmCardHomeComponent({ movie }: FilmCardHomeProps) {
     <li className="bg-black rounded-sm overflow-hidden shadow-md group hover:scale-105 transition duration-300">
       <Link to="/" className="flex flex-col relative">
         <img
-          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+          src={
+            movie.backdrop_path
+              ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+              : `${'https://image.tmdb.org/t/p/original/xujdtM1rkqmRIQXeopuL355ciwJ.jpg'}`
+          }
           alt={movie.title}
         />
 

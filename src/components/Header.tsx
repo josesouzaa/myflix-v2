@@ -28,7 +28,7 @@ export default function Header() {
 
             <li>
               <Link
-                to="/"
+                to="/search"
                 className="hover:text-red-600 font-medium transition"
               >
                 Search
@@ -75,7 +75,7 @@ export default function Header() {
 
                   <Menu.Item as="li" className="border-t-red-600/30 border-t">
                     <Link
-                      to="/"
+                      to="/search"
                       className="hover:text-red-600 font-medium transition py-2 block"
                     >
                       Search
