@@ -3,21 +3,21 @@ import { FilmCardHome } from '../components/FilmCardHome'
 import { useGetTrendingMovies } from '../hooks/useGetTrendingMovies'
 
 export function Home() {
-  const { data } = useGetTrendingMovies()
+  const { data: movies } = useGetTrendingMovies()
 
-  if (data)
-    return (
-      <div className="max-w-screen-lg mx-auto pb-8">
-        <h1 className="text-center text-5xl font-bold mb-10">
-          Trending of the week
-        </h1>
+  return (
+    <section className="custom-container">
+      <h1 className="text-center text-5xl font-bold mb-10">
+        Trending of the week
+      </h1>
 
-        <ul className="mt-5 grid px-4 lg:px-0 grid-cols-none sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {data.map((movie) => (
+      {movies && (
+        <ul className="mt-5 grid grid-cols-none sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {movies.map((movie) => (
             <FilmCardHome key={movie.id} movie={movie} />
           ))}
         </ul>
-      </div>
-    )
-  return null
+      )}
+    </section>
+  )
 }

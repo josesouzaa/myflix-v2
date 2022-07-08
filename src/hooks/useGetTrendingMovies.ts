@@ -5,7 +5,7 @@ export interface TrendingMovies {
   backdrop_path: string
   genre_ids: number[]
   id: number
-  media_type?: string
+  media_type: string
   title: string
   original_language: string
   original_title: string

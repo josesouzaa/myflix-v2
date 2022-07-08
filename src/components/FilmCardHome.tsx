@@ -11,7 +11,7 @@ interface FilmCardHomeProps {
 function FilmCardHomeComponent({ movie }: FilmCardHomeProps) {
   return (
     <li className="bg-black rounded-sm overflow-hidden shadow-md group hover:scale-105 transition duration-300">
-      <Link to="/" className="flex flex-col relative">
+      <Link to={`/movie/${movie.id}`} className="flex flex-col relative">
         <img
           src={
             movie.backdrop_path
