@@ -87,12 +87,7 @@ export default function Header() {
                     as="li"
                     className="border-t-red-600/30 border-t py-2"
                   >
-                    <button
-                      type="button"
-                      className="flex items-center gap-1 px-2 py-1 bg-red-600 rounded-full font-bold hover:bg-red-700 transition"
-                    >
-                      Login with Google
-                    </button>
+                    <AuthButton />
                   </Menu.Item>
                 </Menu.Items>
 
