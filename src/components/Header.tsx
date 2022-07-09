@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom'
 import { Menu, Transition } from '@headlessui/react'
 
 import { List, X } from 'phosphor-react'
-import { useAuth } from '../contexts/AuthContext'
+
+import AuthButton from './AuthButton'
 
 export default function Header() {
-  const { logIn, logOut } = useAuth()
-
   return (
     <header className="w-full px-4 py-4 bg-black relative">
       <div className="max-w-screen-lg mx-auto flex justify-between items-center">
@@ -39,13 +38,7 @@ export default function Header() {
             </li>
 
             <li>
-              <button
-                type="button"
-                onClick={logIn}
-                className="flex items-center gap-1 px-2 py-1 bg-red-600 rounded-full font-bold hover:bg-red-700 transition"
-              >
-                Login with Google
-              </button>
+              <AuthButton />
             </li>
           </ul>
         </nav>

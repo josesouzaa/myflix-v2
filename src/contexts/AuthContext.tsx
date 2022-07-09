@@ -1,11 +1,27 @@
-import { createContext, ReactNode, useContext } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 
 import {
   getAuth,
-  GoogleAuthProvider,
+  onAuthStateChanged,
   signInWithPopup,
   signOut
 } from 'firebase/auth'
+import { provider } from '../utils/firebase'
+
+interface SessionData {
+  uid?: string | null
+  name?: string | null
+  email?: string | null
+  avatar?: string | null
+  bio?: string
+}
 
 interface AuthProviderProps {
   children: ReactNode
@@ -14,26 +30,38 @@ interface AuthProviderProps {
 interface AuthContextData {
   logIn: () => void
   logOut: () => void
+  session: SessionData
 }
 
 const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const [session, setSession] = useState({} as SessionData)
   const auth = getAuth()
-  const provider = new GoogleAuthProvider()
 
-  async function logIn() {
-    const result = await signInWithPopup(auth, provider)
-    console.log(result)
-  }
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      setSession({
+        uid: user?.uid,
+        name: user?.displayName,
+        email: user?.email,
+        avatar: user?.photoURL,
+        bio: ''
+      })
+    })
+  }, [auth])
 
-  async function logOut() {
-    const result = await signOut(auth)
-    console.log(result)
-  }
+  const logIn = useCallback(async () => {
+    await signInWithPopup(auth, provider)
+  }, [])
+
+  const logOut = useCallback(async () => {
+    await signOut(auth)
+    setSession({})
+  }, [])
 
   return (
-    <AuthContext.Provider value={{ logIn, logOut }}>
+    <AuthContext.Provider value={{ logIn, logOut, session }}>
       {children}
     </AuthContext.Provider>
   )
