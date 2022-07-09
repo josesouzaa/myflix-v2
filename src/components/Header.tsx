@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 import { Menu, Transition } from '@headlessui/react'
 
-import { MenuIcon } from '../assets/MenuIcon'
+import { GoogleLogo, List, X } from 'phosphor-react'
 
 export default function Header() {
   return (
@@ -16,7 +16,7 @@ export default function Header() {
 
         {/* Menu Screen */}
         <nav className="hidden md:block">
-          <ul className="flex gap-4">
+          <ul className="flex items-center gap-4">
             <li>
               <Link
                 to="/"
@@ -36,12 +36,12 @@ export default function Header() {
             </li>
 
             <li>
-              <Link
-                to="/"
-                className="hover:text-red-600 font-medium transition"
+              <button
+                type="button"
+                className="flex items-center gap-1 px-2 py-1 bg-red-600 rounded-full font-bold hover:bg-red-700 transition"
               >
-                Login
-              </Link>
+                Login with Google
+              </button>
             </li>
           </ul>
         </nav>
@@ -51,7 +51,11 @@ export default function Header() {
           {({ open }) => (
             <>
               <Menu.Button>
-                <MenuIcon className="text-white bg-red-600 p-1 w-8 h-8 rounded-sm hover:bg-red-700 transition" />
+                {open ? (
+                  <X className="text-white bg-red-600 p-1 w-8 h-8 rounded-sm hover:bg-red-600 transition" />
+                ) : (
+                  <List className="text-white bg-red-600 p-1 w-8 h-8 rounded-sm hover:bg-red-600 transition" />
+                )}
               </Menu.Button>
 
               <Transition
@@ -82,13 +86,16 @@ export default function Header() {
                     </Link>
                   </Menu.Item>
 
-                  <Menu.Item as="li" className="border-t-red-600/30 border-t">
-                    <Link
-                      to="/"
-                      className="hover:text-red-600 font-medium transition py-2 block"
+                  <Menu.Item
+                    as="li"
+                    className="border-t-red-600/30 border-t py-2"
+                  >
+                    <button
+                      type="button"
+                      className="flex items-center gap-1 px-2 py-1 bg-red-600 rounded-full font-bold hover:bg-red-700 transition"
                     >
-                      Login
-                    </Link>
+                      Login with Google
+                    </button>
                   </Menu.Item>
                 </Menu.Items>
 
