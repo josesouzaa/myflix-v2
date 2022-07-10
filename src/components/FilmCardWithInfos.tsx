@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom'
 
 import { SearchedMovies } from '../hooks/useGetMovieByTitle'
 
-interface FilmCardSearchProps {
+interface FilmCardWithInfosProps {
   movie: SearchedMovies
 }
 
-function FilmCardSearchComponent({ movie }: FilmCardSearchProps) {
+function FilmCardWithInfosComponent({ movie }: FilmCardWithInfosProps) {
   return (
     <li className="bg-black rounded-sm overflow-hidden shadow-md group hover:scale-105 transition duration-300">
       <Link to={`/movie/${movie.id}`} className="flex flex-col relative">
@@ -43,6 +43,9 @@ function FilmCardSearchComponent({ movie }: FilmCardSearchProps) {
   )
 }
 
-export const FilmCardSearch = memo(FilmCardSearchComponent, (prev, next) => {
-  return Object.is(prev.movie, next.movie)
-})
+export const FilmCardWithInfos = memo(
+  FilmCardWithInfosComponent,
+  (prev, next) => {
+    return Object.is(prev.movie, next.movie)
+  }
+)

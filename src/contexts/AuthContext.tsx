@@ -15,6 +15,9 @@ import {
 } from 'firebase/auth'
 import { provider } from '../utils/firebase'
 
+import { collection, query, where, getDocs, addDoc } from 'firebase/firestore'
+import { db } from '../utils/firebase'
+
 interface SessionData {
   uid?: string | null
   name?: string | null
@@ -52,7 +55,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [auth])
 
   const logIn = useCallback(async () => {
-    await signInWithPopup(auth, provider)
+    const { user } = await signInWithPopup(auth, provider)
+    const users = collection(db, 'users')
+    const q = query(users, where('uid', '==', user.uid))
+    const qResult = await getDocs(q)
+
+    if (qResult.docs.length <= 0) {
+      await addDoc(collection(db, 'users'), {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        avatar: user.photoURL,
+        bio: ''
+      })
+    }
   }, [])
 
   const logOut = useCallback(async () => {

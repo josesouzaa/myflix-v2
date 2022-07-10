@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom'
 
 import { TrendingMovies } from '../hooks/useGetTrendingMovies'
 
-interface FilmCardHomeProps {
+interface FilmCardWithTitleProps {
   movie: TrendingMovies
 }
 
-function FilmCardHomeComponent({ movie }: FilmCardHomeProps) {
+function FilmCardWithTitleComponent({ movie }: FilmCardWithTitleProps) {
   return (
     <li className="bg-black rounded-sm overflow-hidden shadow-md group hover:scale-105 transition duration-300">
       <Link to={`/movie/${movie.id}`} className="flex flex-col relative">
@@ -29,6 +29,9 @@ function FilmCardHomeComponent({ movie }: FilmCardHomeProps) {
   )
 }
 
-export const FilmCardHome = memo(FilmCardHomeComponent, (prev, next) => {
-  return Object.is(prev.movie, next.movie)
-})
+export const FilmCardWithTitle = memo(
+  FilmCardWithTitleComponent,
+  (prev, next) => {
+    return Object.is(prev.movie, next.movie)
+  }
+)

@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react'
 
-import { FilmCardSearch } from '../components/FilmCardSearch'
+import { FilmCardWithInfos } from '../components/FilmCardWithInfos'
 
 import { useGetMovieByTitle } from '../hooks/useGetMovieByTitle'
 
@@ -40,7 +40,7 @@ export function Search() {
       {movies && (
         <ul className="mt-8 grid grid-cols-none sm:grid-cols-2 md:grid-cols-3 gap-4">
           {movies.map((movie) => (
-            <FilmCardSearch key={movie.id} movie={movie} />
+            <FilmCardWithInfos key={movie.id} movie={movie} />
           ))}
         </ul>
       )}

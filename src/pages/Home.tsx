@@ -1,4 +1,4 @@
-import { FilmCardHome } from '../components/FilmCardHome'
+import { FilmCardWithTitle } from '../components/FilmCardWithTitle'
 
 import { useGetTrendingMovies } from '../hooks/useGetTrendingMovies'
 
@@ -14,7 +14,7 @@ export function Home() {
       {movies && (
         <ul className="mt-5 grid grid-cols-none sm:grid-cols-2 md:grid-cols-3 gap-4">
           {movies.map((movie) => (
-            <FilmCardHome key={movie.id} movie={movie} />
+            <FilmCardWithTitle key={movie.id} movie={movie} />
           ))}
         </ul>
       )}
