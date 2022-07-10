@@ -19,6 +19,7 @@ import { collection, query, where, getDocs, addDoc } from 'firebase/firestore'
 import { db } from '../utils/firebase'
 
 interface SessionData {
+  id?: string | null
   uid?: string | null
   name?: string | null
   email?: string | null
@@ -40,34 +41,54 @@ const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState({} as SessionData)
+  const [isLoading, setIsLoading] = useState(false)
   const auth = getAuth()
 
+  async function getUserByUid(uid: string) {
+    const users = collection(db, 'users')
+    const q = query(users, where('uid', '==', uid))
+    const result = await getDocs(q)
+    return result
+  }
+
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      setSession({
-        uid: user?.uid,
-        name: user?.displayName,
-        email: user?.email,
-        avatar: user?.photoURL,
-        bio: ''
-      })
+    onAuthStateChanged(auth, async (user) => {
+      if (user?.uid) {
+        let id
+        const result = await getUserByUid(user.uid)
+        result.forEach((r) => (id = r.id))
+
+        if (!isLoading) {
+          setSession({
+            id,
+            uid: user?.uid,
+            name: user?.displayName,
+            email: user?.email,
+            avatar: user?.photoURL
+          })
+        }
+      }
     })
-  }, [auth])
+  }, [auth, isLoading])
 
   const logIn = useCallback(async () => {
-    const { user } = await signInWithPopup(auth, provider)
-    const users = collection(db, 'users')
-    const q = query(users, where('uid', '==', user.uid))
-    const qResult = await getDocs(q)
+    try {
+      setIsLoading(true)
+      const { user } = await signInWithPopup(auth, provider)
+      const result = await getUserByUid(user.uid)
 
-    if (qResult.docs.length <= 0) {
-      await addDoc(collection(db, 'users'), {
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        avatar: user.photoURL,
-        bio: ''
-      })
+      if (result.empty) {
+        await addDoc(collection(db, 'users'), {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          avatar: user.photoURL
+        })
+      }
+    } catch (err) {
+      alert(err)
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 

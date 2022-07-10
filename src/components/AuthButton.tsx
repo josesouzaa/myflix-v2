@@ -12,7 +12,7 @@ export default function AuthButton() {
       {session.email ? (
         <div className="flex">
           <Link
-            to="/"
+            to={`/porfile/${session.id}`}
             className="px-2 py-1 bg-red-600 rounded-l-full font-bold hover:bg-red-700 transition"
           >
             View profile
