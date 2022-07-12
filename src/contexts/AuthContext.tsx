@@ -1,6 +1,8 @@
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -15,8 +17,10 @@ import {
 } from 'firebase/auth'
 import { provider } from '../utils/firebase'
 
-import { collection, query, where, getDocs, addDoc } from 'firebase/firestore'
+import { collection, addDoc } from 'firebase/firestore'
 import { db } from '../utils/firebase'
+
+import { useGetUserByUid } from '../hooks/useGetUserByUid'
 
 interface SessionData {
   id?: string | null
@@ -35,6 +39,7 @@ interface AuthContextData {
   logIn: () => void
   logOut: () => void
   session: SessionData
+  setSession: Dispatch<SetStateAction<SessionData>>
 }
 
 const AuthContext = createContext({} as AuthContextData)
@@ -44,19 +49,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(false)
   const auth = getAuth()
 
-  async function getUserByUid(uid: string) {
-    const users = collection(db, 'users')
-    const q = query(users, where('uid', '==', uid))
-    const result = await getDocs(q)
-    return result
-  }
-
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user?.uid) {
         let id
-        const result = await getUserByUid(user.uid)
-        result.forEach((r) => (id = r.id))
+        let bio
+        const result = await useGetUserByUid(user.uid)
+
+        result.forEach((r) => {
+          id = r.id
+          bio = r.get('bio') || ''
+        })
 
         if (!isLoading) {
           setSession({
@@ -64,7 +67,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
             uid: user?.uid,
             name: user?.displayName,
             email: user?.email,
-            avatar: user?.photoURL
+            avatar: user?.photoURL,
+            bio
           })
         }
       }
@@ -75,7 +79,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setIsLoading(true)
       const { user } = await signInWithPopup(auth, provider)
-      const result = await getUserByUid(user.uid)
+      const result = await useGetUserByUid(user.uid)
 
       if (result.empty) {
         await addDoc(collection(db, 'users'), {
@@ -98,7 +102,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ logIn, logOut, session }}>
+    <AuthContext.Provider value={{ logIn, logOut, session, setSession }}>
       {children}
     </AuthContext.Provider>
   )
