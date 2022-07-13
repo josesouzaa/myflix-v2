@@ -3,6 +3,7 @@ import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
 import { SearchedMovies } from '../hooks/useGetMovieByTitle'
+import { FavoritesButton } from './FavoritesButton'
 
 interface FilmCardWithInfosProps {
   movie: SearchedMovies
@@ -38,6 +39,8 @@ function FilmCardWithInfosComponent({ movie }: FilmCardWithInfosProps) {
             {movie.overview}
           </p>
         </div>
+
+        <FavoritesButton movie={movie} />
       </Link>
     </li>
   )
