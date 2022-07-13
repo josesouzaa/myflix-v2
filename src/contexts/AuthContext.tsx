@@ -20,7 +20,8 @@ import { provider } from '../utils/firebase'
 import { collection, addDoc } from 'firebase/firestore'
 import { db } from '../utils/firebase'
 
-import { useGetUserByUid } from '../hooks/useGetUserByUid'
+import { useGetUserByUid, useuseGetUserByUid } from '../hooks/useGetUserByUid'
+import { useQuery } from 'react-query'
 
 interface SessionData {
   id?: string | null
@@ -45,13 +46,21 @@ interface AuthContextData {
 const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const [userId, setUserId] = useState('')
   const [session, setSession] = useState({} as SessionData)
   const [isLoading, setIsLoading] = useState(false)
   const auth = getAuth()
 
+  const { data: newSession, refetch } = useQuery('session', () =>
+    useuseGetUserByUid(userId)
+  )
+
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user?.uid) {
+        setUserId(user.uid)
+        refetch()
+
         let id
         let bio
         const result = await useGetUserByUid(user.uid)
