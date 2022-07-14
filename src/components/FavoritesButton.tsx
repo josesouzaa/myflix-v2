@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { SearchedMovies } from '../hooks/useGetMovieByTitle'
 
 import {
@@ -12,15 +14,13 @@ import { db } from '../utils/firebase'
 import { useAuth } from '../contexts/AuthContext'
 
 import { Star, X } from 'phosphor-react'
-import { useCallback } from 'react'
 
 interface FavoritesButtonProps {
   movie: SearchedMovies
 }
 
 export function FavoritesButton({ movie }: FavoritesButtonProps) {
-  const { session } = useAuth()
-  const favorite = false
+  const { session, updateSession } = useAuth()
 
   const toggleFavorite = useCallback(async () => {
     try {
@@ -33,10 +33,12 @@ export function FavoritesButton({ movie }: FavoritesButtonProps) {
           await updateDoc(userRef, {
             favorites: arrayRemove(movie.id)
           })
+          updateSession(session.id)
         } else {
           await updateDoc(userRef, {
             favorites: arrayUnion(movie.id)
           })
+          updateSession(session.id)
         }
       }
     } catch (err) {
@@ -44,27 +46,29 @@ export function FavoritesButton({ movie }: FavoritesButtonProps) {
     }
   }, [])
 
-  return (
-    <>
-      {favorite ? (
-        <button
-          type="button"
-          onClick={toggleFavorite}
-          className="text-xs font-thin bg-gray-600 p-[2px] rounded-sm flex items-center gap-[1px] absolute top-0 right-0 opacity-0 group-hover:opacity-80 translate-x-1/2 group-hover:translate-x-0 transition duration-500 hover:bg-red-600 z-50"
-        >
-          Remove from Favorites
-          <X size={16} />
-        </button>
-      ) : (
-        <button
-          type="button"
-          onClick={toggleFavorite}
-          className="text-xs font-thin bg-red-600 p-[2px] rounded-sm opacity-0 group-hover:opacity-80 translate-x-1/2 group-hover:translate-x-0 flex items-center gap-[1px] absolute top-0 right-0 transition duration-500 hover:bg-green-500 z-50"
-        >
-          Add to Favorites
-          <Star className="text-yellow-500" size={16} />
-        </button>
-      )}
-    </>
-  )
+  if (session.favorites)
+    return (
+      <>
+        {session.favorites.includes(movie.id) ? (
+          <button
+            type="button"
+            onClick={toggleFavorite}
+            className="text-xs font-thin bg-gray-600 p-[2px] rounded-sm flex items-center gap-[1px] absolute top-0 right-0 opacity-0 group-hover:opacity-80 translate-x-1/2 group-hover:translate-x-0 transition duration-500 hover:bg-red-600 z-50"
+          >
+            Remove from Favorites
+            <X size={16} />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={toggleFavorite}
+            className="text-xs font-thin bg-red-600 p-[2px] rounded-sm opacity-0 group-hover:opacity-80 translate-x-1/2 group-hover:translate-x-0 flex items-center gap-[1px] absolute top-0 right-0 transition duration-500 hover:bg-green-500 z-50"
+          >
+            Add to Favorites
+            <Star className="text-yellow-500" size={16} />
+          </button>
+        )}
+      </>
+    )
+  return null
 }

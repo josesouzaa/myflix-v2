@@ -17,12 +17,17 @@ import {
 } from 'firebase/auth'
 import { provider } from '../utils/firebase'
 
-import { collection, addDoc, doc, getDoc } from 'firebase/firestore'
+import { collection, addDoc } from 'firebase/firestore'
 import { db } from '../utils/firebase'
 
+import { useGetUserByUid, useGetUserOnDb } from '../hooks/useGetUserByUid'
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+  useQuery
+} from 'react-query'
 import { useNavigate } from 'react-router-dom'
-
-import { useGetUserByUid } from '../hooks/useGetUserByUid'
 
 interface SessionData {
   id?: string | null
@@ -31,7 +36,6 @@ interface SessionData {
   email?: string | null
   avatar?: string | null
   bio?: string
-  favorites?: number[]
 }
 
 interface AuthProviderProps {
@@ -41,46 +45,40 @@ interface AuthProviderProps {
 interface AuthContextData {
   logIn: () => void
   logOut: () => void
-  session: SessionData
-  setSession: Dispatch<SetStateAction<SessionData>>
-  updateSession: (id: string) => void
+  session: SessionData | undefined
+  refetchSession: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  ) => Promise<QueryObserverResult<SessionData, unknown>>
 }
 
 const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [session, setSession] = useState({} as SessionData)
+  const [userUid, setUserUid] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const auth = getAuth()
 
   const navigate = useNavigate()
 
+  const {
+    data: session,
+    refetch: refetchSession,
+    isRefetching
+  } = useQuery('session', () => useGetUserOnDb(userUid))
+
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user?.uid) {
-        let id
-        let data = {}
-        const result = await useGetUserByUid(user.uid)
-
-        result.forEach((r) => {
-          id = r.id
-          data = r.data()
-        })
+        console.log(user)
+        setUserUid(user.uid)
+        refetchSession()
 
         if (!isLoading) {
-          setSession({
-            id,
-            ...data
-          })
+          refetchSession()
         }
       }
     })
   }, [auth, isLoading])
-
-  const updateSession = useCallback(async (id: string) => {
-    const userRef = doc(db, 'users', id)
-    getDoc(userRef).then((r) => setSession({ id: r.id, ...r.data() }))
-  }, [])
 
   const logIn = useCallback(async () => {
     try {
@@ -105,14 +103,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logOut = useCallback(async () => {
     await signOut(auth)
-    setSession({})
-    navigate('/')
+    setUserUid('')
+    refetchSession()
+
+    if (!isRefetching) {
+      navigate('/')
+      console.log(session)
+    }
   }, [])
 
   return (
-    <AuthContext.Provider
-      value={{ logIn, logOut, session, setSession, updateSession }}
-    >
+    <AuthContext.Provider value={{ logIn, logOut, session, refetchSession }}>
       {children}
     </AuthContext.Provider>
   )

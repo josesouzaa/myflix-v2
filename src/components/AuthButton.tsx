@@ -9,7 +9,7 @@ export default function AuthButton() {
 
   return (
     <>
-      {session.email ? (
+      {session?.email ? (
         <div className="flex">
           <Link
             to={`/porfile/${session.id}`}
