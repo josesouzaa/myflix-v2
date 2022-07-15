@@ -1,12 +1,13 @@
 import { memo } from 'react'
 
 import { Link } from 'react-router-dom'
+import { SearchedMovie } from '../hooks/useGetMovieById'
 
 import { SearchedMovies } from '../hooks/useGetMovieByTitle'
 import { FavoritesButton } from './FavoritesButton'
 
 interface FilmCardWithInfosProps {
-  movie: SearchedMovies
+  movie: SearchedMovies | SearchedMovie
 }
 
 function FilmCardWithInfosComponent({ movie }: FilmCardWithInfosProps) {

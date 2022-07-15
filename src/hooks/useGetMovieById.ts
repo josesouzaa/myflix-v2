@@ -27,7 +27,7 @@ export interface SearchedMovie {
   backdrop_path: string
   belongs_to_collection?: any
   budget: number
-  genres: Genre[]
+  genres?: Genre[]
   homepage: string
   id: number
   imdb_id: string
@@ -50,7 +50,9 @@ export interface SearchedMovie {
   vote_count: number
 }
 
-async function GetMovieById(id?: string): Promise<SearchedMovie> {
+export async function GetMovieById(
+  id?: string | number
+): Promise<SearchedMovie> {
   const req = await fetch(
     `${import.meta.env.VITE_TMDB_URL}/movie/${id}?api_key=${
       import.meta.env.VITE_TMDB_KEY

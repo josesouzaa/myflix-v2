@@ -14,9 +14,10 @@ import { db } from '../utils/firebase'
 import { useAuth } from '../contexts/AuthContext'
 
 import { Star, X } from 'phosphor-react'
+import { SearchedMovie } from '../hooks/useGetMovieById'
 
 interface FavoritesButtonProps {
-  movie: SearchedMovies
+  movie: SearchedMovies | SearchedMovie
 }
 
 export function FavoritesButton({ movie }: FavoritesButtonProps) {

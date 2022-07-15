@@ -77,10 +77,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     })
   }, [auth, isLoading])
 
-  const updateSession = useCallback(async (id: string) => {
+  async function updateSession(id: string) {
     const userRef = doc(db, 'users', id)
     getDoc(userRef).then((r) => setSession({ id: r.id, ...r.data() }))
-  }, [])
+  }
 
   const logIn = useCallback(async () => {
     try {
