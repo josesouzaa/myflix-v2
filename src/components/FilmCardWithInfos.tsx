@@ -45,7 +45,7 @@ function FilmCardWithInfosComponent({ movie }: FilmCardWithInfosProps) {
         </p>
       </div>
 
-      <FavoritesButton movie={movie} />
+      <FavoritesButton movieId={movie.id} />
     </li>
   )
 }

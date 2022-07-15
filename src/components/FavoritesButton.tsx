@@ -1,7 +1,5 @@
 import { useCallback } from 'react'
 
-import { SearchedMovies } from '../hooks/useGetMovieByTitle'
-
 import {
   arrayRemove,
   arrayUnion,
@@ -14,13 +12,12 @@ import { db } from '../utils/firebase'
 import { useAuth } from '../contexts/AuthContext'
 
 import { Star, X } from 'phosphor-react'
-import { SearchedMovie } from '../hooks/useGetMovieById'
 
 interface FavoritesButtonProps {
-  movie: SearchedMovies | SearchedMovie
+  movieId: number
 }
 
-export function FavoritesButton({ movie }: FavoritesButtonProps) {
+export function FavoritesButton({ movieId }: FavoritesButtonProps) {
   const { session, updateSession } = useAuth()
 
   const toggleFavorite = useCallback(async () => {
@@ -28,16 +25,16 @@ export function FavoritesButton({ movie }: FavoritesButtonProps) {
       if (session.id) {
         const userRef = doc(db, 'users', session.id)
         const userSnap = await getDoc(userRef)
-        const isFavorite = userSnap.get('favorites')?.includes(movie.id)
+        const isFavorite = userSnap.get('favorites')?.includes(movieId)
 
         if (isFavorite) {
           await updateDoc(userRef, {
-            favorites: arrayRemove(movie.id)
+            favorites: arrayRemove(movieId)
           })
           updateSession(session.id)
         } else {
           await updateDoc(userRef, {
-            favorites: arrayUnion(movie.id)
+            favorites: arrayUnion(movieId)
           })
           updateSession(session.id)
         }
@@ -50,7 +47,7 @@ export function FavoritesButton({ movie }: FavoritesButtonProps) {
   if (session.favorites)
     return (
       <>
-        {session.favorites.includes(movie.id) ? (
+        {session.favorites.includes(movieId) ? (
           <button
             type="button"
             onClick={toggleFavorite}

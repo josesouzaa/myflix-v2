@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom'
+import { FavoritesButton } from '../components/FavoritesButton'
 
 import { useGetMovieById } from '../hooks/useGetMovieById'
 
@@ -10,7 +11,7 @@ export function Movie() {
   if (movie)
     return (
       <section className="custom-container">
-        <div className="grid grid-cols-1 gap-4 p-4 bg-black md:grid-cols-2 rounded-sm">
+        <div className="grid grid-cols-1 gap-4 p-4 bg-black md:grid-cols-2 rounded-sm relative group">
           <img
             className="rounded-sm"
             src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
@@ -34,7 +35,7 @@ export function Movie() {
               </small>
 
               <div className="bg-red-600 bg-opacity-25 flex items-center rounded-tr rounded-br">
-                {movie.genres.map((g) => (
+                {movie.genres?.map((g) => (
                   <small
                     key={g.name}
                     className="pl-2 pt-2 pb-2 last-of-type:pr-2"
@@ -49,6 +50,8 @@ export function Movie() {
               {movie.overview}
             </p>
           </div>
+
+          <FavoritesButton movieId={movie.id} />
         </div>
       </section>
     )
