@@ -43,7 +43,7 @@ export function Porfile() {
               alt={session.name}
             />
           )}
-          <div className="bg-red-600/30 p-2 sm:p-4 rounded-sm flex-1">
+          <div className="bg-red-600/30 p-2 sm:p-4 rounded-sm flex-1 w-full">
             <h2 className="font-bold text-xl">{session.name}</h2>
 
             <span className="text-gray-400">{session.email}</span>
@@ -52,26 +52,29 @@ export function Porfile() {
           </div>
         </div>
 
-        {favorites.length > 0 && (
-          <div className="mt-8">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold">My favorites movies</h3>
-              <button
-                className="flex items-center gap-[2px] bg-red-600 px-2 py-1 rounded-sm hover:bg-red-500 transition"
-                type="button"
-                onClick={reloadFavorites}
-              >
-                Reload <ArrowsClockwise size={16} />
-              </button>
-            </div>
-
+        <div className="mt-8">
+          <div className="flex justify-between items-center flex-col sm:flex-row">
+            <h3 className="text-lg font-bold">My favorites movies</h3>
+            <button
+              className="flex items-center gap-[2px] bg-red-600 px-2 py-1 rounded-sm hover:bg-red-500 transition"
+              type="button"
+              onClick={reloadFavorites}
+            >
+              Reload <ArrowsClockwise size={16} />
+            </button>
+          </div>
+          {favorites.length > 0 ? (
             <ul className="mt-8 grid grid-cols-none sm:grid-cols-2 md:grid-cols-3 gap-4">
               {favorites.map((movie) => (
                 <FilmCardWithInfos key={movie.id} movie={movie} />
               ))}
             </ul>
-          </div>
-        )}
+          ) : (
+            <p className="w-full text-center mt-8">
+              No movies in favorites, or reloads to sync
+            </p>
+          )}
+        </div>
       </section>
     )
   return <p className="w-full text-center">Please login to continue</p>
