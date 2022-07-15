@@ -11,7 +11,7 @@ export function Movie() {
   if (movie)
     return (
       <section className="custom-container">
-        <div className="grid grid-cols-1 gap-4 p-4 bg-black md:grid-cols-2 rounded-sm relative group">
+        <div className="grid grid-cols-1 gap-4 p-4 bg-black md:grid-cols-2 rounded-sm relative group overflow-hidden">
           <img
             className="rounded-sm"
             src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}

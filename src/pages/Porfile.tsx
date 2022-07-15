@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 
 import { Bio } from '../components/Bio'
@@ -8,7 +8,6 @@ import { GetMovieById, SearchedMovie } from '../hooks/useGetMovieById'
 import { ArrowsClockwise } from 'phosphor-react'
 
 export function Porfile() {
-  const isFirstRender = useRef(true)
   const [favorites, setFavorites] = useState([] as SearchedMovie[])
 
   const { session } = useAuth()
@@ -24,11 +23,6 @@ export function Porfile() {
   }
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false
-      return
-    }
-
     reloadFavorites()
   }, [])
 
