@@ -1,6 +1,6 @@
 # MyFlix v2
 
-Aplicação web de catálogo de filmes. É possível visualizar os filmes em alta na home, realizar buscas e com o login efetuado adicionar filmes aos seus favoritos. Desenvolvimento realizado com ReactJS, Firebase para autenticação e banco de dados e a API do TMDB para o consumo de informações.
+O MyFlix é uma aplicação web de catálogo de filmes onde é possível visualizar os filmes em alta na home, realizar buscas e com o login efetuado adicionar filmes aos seus favoritos. Desenvolvimento realizado com ReactJS, Firebase para autenticação e banco de dados e a API do TMDB para o consumo de informações.
 
 \*Esta é uma atualização de um [projeto](https://github.com/josesouzaa/myflix) que realizei há um tempo. Eu havia gostado muito do resultado, por isso resolvi atualiza-lo com outros conhecimentos que adquiri com o tempo.
 
