@@ -14,12 +14,21 @@ export function Porfile() {
 
   function reloadFavorites() {
     const filtredFavorites = [] as SearchedMovie[]
-    session.favorites?.forEach(async (movie) => {
-      const res = await GetMovieById(movie)
 
-      filtredFavorites.push(res)
-      setFavorites([...new Set(filtredFavorites)])
-    })
+    if (session.favorites) {
+      if (session.favorites.length > 0) {
+        session.favorites?.forEach(async (movie) => {
+          const res = await GetMovieById(movie)
+
+          filtredFavorites.push(res)
+          setFavorites([...new Set(filtredFavorites)])
+        })
+      } else {
+        setFavorites([])
+      }
+    } else {
+      setFavorites([])
+    }
   }
 
   useEffect(() => {
@@ -33,7 +42,10 @@ export function Porfile() {
           {session.avatar && session.name && (
             <img
               className="rounded-full ring-1 ring-red-600/70"
-              src={session.avatar}
+              src={
+                session.avatar ||
+                'https://lh3.googleusercontent.com/a-/AFdZucrzxouOluImvdcbIsLovB57iNqMCG5Bj4ZDx7g9Vw=s96-c'
+              }
               alt={session.name}
             />
           )}

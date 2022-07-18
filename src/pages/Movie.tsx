@@ -51,7 +51,7 @@ export function Movie() {
             </p>
           </div>
 
-          <FavoritesButton movieId={movie.id} />
+          <FavoritesButton movieId={Number(id)} />
         </div>
       </section>
     )

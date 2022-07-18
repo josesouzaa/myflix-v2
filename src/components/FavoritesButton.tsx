@@ -44,10 +44,10 @@ export function FavoritesButton({ movieId }: FavoritesButtonProps) {
     }
   }, [])
 
-  if (session.favorites)
+  if (session.id)
     return (
       <>
-        {session.favorites.includes(movieId) ? (
+        {session.favorites?.includes(movieId) ? (
           <button
             type="button"
             onClick={toggleFavorite}
